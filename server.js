@@ -8,7 +8,7 @@ const path = require('path');
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8787);
 const ECC_BASE_URL = String(process.env.ECC_BASE_URL || 'https://ecc-kappa-hazel.vercel.app').replace(/\/+$/, '');
-const ALLOWED = new Set(['status','profile','capabilities','repo-status','activepieces-frontdesk-issue','run','packet']);
+const ALLOWED = new Set(['profile','repo-status','activepieces-frontdesk-issue','run','packet']);\nconst pkg = require('./package.json');\nconst platform = require('./platform.json');\nconst { CAPABILITIES } = require('./api/capabilities.js');
 const MAX_BODY = 128 * 1024;
 
 const TYPES = {
@@ -73,6 +73,42 @@ function serveStatic(res, pathname) {
 http.createServer(async (req,res)=>{
   const url = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
   try {
+    if (req.method === 'GET' && url.pathname === '/api/status') {
+      return send(res,200,JSON.stringify({
+        app: platform.platform.name,
+        repository: platform.platform.repository,
+        version: pkg.version,
+        role: platform.platform.role,
+        controlPlane: true,
+        sourceOfTruth: true,
+        providerCount: platform.providers.length,
+        productCount: platform.products.length,
+        providers: platform.providers.map(({ id, name, role, endpoint }) => ({ id, name, role, endpoint }))
+      }),'application/json; charset=utf-8');
+    }
+    if (req.method === 'GET' && url.pathname === '/api/capabilities') {
+      return send(res,200,JSON.stringify({
+        system: 'McLain OS',
+        architecture: {
+          controlPlane: 'McLain OS',
+          physicalIntelligence: 'Aurora Core',
+          engineeringRuntime: 'ECC',
+          automationEngine: 'Activepieces',
+          memorySpine: 'Mem0',
+          syncEngine: 'Electric'
+        },
+        capabilities: CAPABILITIES
+      }),'application/json; charset=utf-8');
+    }
+    if (req.method === 'GET' && url.pathname === '/api/provider') {
+      return send(res,200,JSON.stringify({
+        schema: platform.schema,
+        ...platform.platform,
+        sourceOfTruth: true,
+        providers: platform.providers,
+        products: platform.products
+      }),'application/json; charset=utf-8');
+    }
     if (url.pathname.startsWith('/api/')) return await proxy(req,res,url);
     if (req.method === 'GET' || req.method === 'HEAD') return serveStatic(res,url.pathname);
     send(res,405,'Method not allowed');
