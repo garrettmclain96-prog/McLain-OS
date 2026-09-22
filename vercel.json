@@ -1,21 +1,43 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
-    { "source": "/api/status", "destination": "/api/ecc-bridge?path=status" },
-    { "source": "/api/profile", "destination": "/api/ecc-bridge?path=profile" },
-    { "source": "/api/capabilities", "destination": "/api/ecc-bridge?path=capabilities" },
-    { "source": "/api/repo-status", "destination": "/api/ecc-bridge?path=repo-status" },
-    { "source": "/api/activepieces-frontdesk-issue", "destination": "/api/ecc-bridge?path=activepieces-frontdesk-issue" },
-    { "source": "/api/run", "destination": "/api/ecc-bridge?path=run" },
-    { "source": "/api/packet", "destination": "/api/ecc-bridge?path=packet" },
-    { "source": "/", "destination": "/index.html" }
+    {
+      "source": "/api/profile",
+      "destination": "/api/ecc-bridge?path=profile"
+    },
+    {
+      "source": "/api/repo-status",
+      "destination": "/api/ecc-bridge?path=repo-status"
+    },
+    {
+      "source": "/api/activepieces-frontdesk-issue",
+      "destination": "/api/ecc-bridge?path=activepieces-frontdesk-issue"
+    },
+    {
+      "source": "/api/run",
+      "destination": "/api/ecc-bridge?path=run"
+    },
+    {
+      "source": "/api/packet",
+      "destination": "/api/ecc-bridge?path=packet"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]
