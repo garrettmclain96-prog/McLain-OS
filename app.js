@@ -358,9 +358,10 @@
     try {
       const response = await fetch('/api/status');
       const data = await response.json();
-      $('systemState').textContent = data.profileAvailable ? 'ready' : 'attention';
-      $('systemState').classList.toggle('ready', data.profileAvailable);
-      $('systemMetrics').innerHTML = `<div><strong>${escapeHtml(data.version || '—')}</strong><small>ECC version</small></div><div><strong>${data.counts?.skills ?? '—'}</strong><small>skills</small></div><div><strong>${data.counts?.commands ?? '—'}</strong><small>commands</small></div>`;
+      const ready = Boolean(data.controlPlane && data.sourceOfTruth);
+      $('systemState').textContent = ready ? 'ready' : 'attention';
+      $('systemState').classList.toggle('ready', ready);
+      $('systemMetrics').innerHTML = `<div><strong>${escapeHtml(data.version || '—')}</strong><small>OS version</small></div><div><strong>${data.providerCount ?? '—'}</strong><small>providers</small></div><div><strong>${data.productCount ?? '—'}</strong><small>products</small></div>`;
     } catch {
       $('systemState').textContent = 'offline';
       $('systemMetrics').innerHTML = '<span>Runtime status is unavailable.</span>';
