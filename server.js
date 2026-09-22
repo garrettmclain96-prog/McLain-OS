@@ -8,7 +8,10 @@ const path = require('path');
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8787);
 const ECC_BASE_URL = String(process.env.ECC_BASE_URL || 'https://ecc-kappa-hazel.vercel.app').replace(/\/+$/, '');
-const ALLOWED = new Set(['profile','repo-status','activepieces-frontdesk-issue','run','packet']);\nconst pkg = require('./package.json');\nconst platform = require('./platform.json');\nconst { CAPABILITIES } = require('./api/capabilities.js');
+const ALLOWED = new Set(['profile','repo-status','activepieces-frontdesk-issue','run','packet']);
+const pkg = require('./package.json');
+const platform = require('./platform.json');
+const { CAPABILITIES } = require('./api/capabilities.js');
 const MAX_BODY = 128 * 1024;
 
 const TYPES = {
