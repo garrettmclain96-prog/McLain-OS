@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080b10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="McLain OS">
+  <meta name="description" content="The iPhone-first command center for McLain Systems projects, proof, blockers, and execution.">
+  <title>McLain Systems OS</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <button class="brand" data-view="home" aria-label="Open command center">
+        <span class="brand-mark">M</span>
+        <span><strong>McLain Systems</strong><small>OPERATING SYSTEM</small></span>
+      </button>
+      <div class="header-actions">
+        <span id="networkBadge" class="network-badge"><i></i><span>online</span></span>
+        <button class="icon-button" id="quickAdd" aria-label="Create project">+</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeView" class="view active" aria-labelledby="homeTitle">
+        <div class="view-heading">
+          <p class="overline" id="todayLabel"></p>
+          <h1 id="homeTitle">Command center</h1>
+          <p>One source of truth for what matters, what is stuck, and what moves next.</p>
+        </div>
+        <div id="portfolioStats" class="metric-grid"></div>
+        <section id="focusCard" class="focus-card"></section>
+        <div class="section-title"><div><p class="overline">PORTFOLIO PRESSURE</p><h2>Needs your attention</h2></div><button class="text-button" data-view="projects">View all</button></div>
+        <div id="attentionList" class="project-list"></div>
+        <div class="section-title"><div><p class="overline">EXECUTION QUEUE</p><h2>Next actions</h2></div></div>
+        <div id="actionQueue" class="action-queue"></div>
+      </section>
+
+      <section id="projectsView" class="view" aria-labelledby="projectsTitle">
+        <div class="view-heading compact-heading">
+          <p class="overline">PORTFOLIO</p>
+          <h1 id="projectsTitle">Projects</h1>
+          <p>Every active bet, ordered by pressure and leverage.</p>
+        </div>
+        <div class="project-controls">
+          <label class="search-box"><span>⌕</span><input id="projectSearch" type="search" placeholder="Search projects" autocomplete="off"></label>
+          <select id="projectFilter" aria-label="Filter projects">
+            <option value="all">All status</option><option value="active">Active</option><option value="shipping">Shipping</option>
+            <option value="blocked">Blocked</option><option value="waiting">Waiting</option><option value="parked">Parked</option>
+          </select>
+        </div>
+        <div id="projectGrid" class="project-grid"></div>
+      </section>
+
+      <section id="captureView" class="view" aria-labelledby="captureTitle">
+        <div class="view-heading compact-heading">
+          <p class="overline">INBOX → SYSTEM</p>
+          <h1 id="captureTitle">Capture it once</h1>
+          <p>Turn a loose idea, problem, or opportunity into an owned project with an execution path.</p>
+        </div>
+        <form id="captureForm" class="surface form-surface">
+          <label>What is it?<input id="captureName" required maxlength="120" placeholder="A product, problem, opportunity…"></label>
+          <label>What must become true?<textarea id="captureOutcome" required maxlength="1200" rows="4" placeholder="Describe the finished outcome, not the activity"></textarea></label>
+          <div class="split-fields">
+            <label>Priority<select id="capturePriority"><option value="critical">Critical</option><option value="high" selected>High</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
+            <label>Category<input id="captureCategory" maxlength="80" value="New venture"></label>
+          </div>
+          <label>Known constraint or blocker<input id="captureBlocker" maxlength="300" placeholder="Optional"></label>
+          <button class="primary-button" type="submit">Create the system <span>→</span></button>
+        </form>
+        <section class="surface leverage-map">
+          <p class="overline">MCLAIN BUILD STANDARD</p>
+          <h2>Every idea must earn its place.</h2>
+          <div class="principles">
+            <div><b>01</b><span><strong>Outcome</strong><small>What changes when this works?</small></span></div>
+            <div><b>02</b><span><strong>Proof</strong><small>How will we know it is real?</small></span></div>
+            <div><b>03</b><span><strong>System</strong><small>What makes the result repeatable?</small></span></div>
+            <div><b>04</b><span><strong>Leverage</strong><small>Can it scale without your hours?</small></span></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="systemView" class="view" aria-labelledby="systemTitle">
+        <div class="view-heading compact-heading">
+          <p class="overline">CONTROL PLANE</p>
+          <h1 id="systemTitle">System</h1>
+          <p>Deployment health, ECC diagnostics, and ownership of your data.</p>
+        </div>
+        <section class="surface system-health">
+          <div class="section-row"><div><p class="overline">LIVE STATUS</p><h2>McLain control plane</h2></div><span id="systemState" class="state-pill">checking</span></div>
+          <div id="systemMetrics" class="system-metrics"><span>Loading runtime status…</span></div>
+        </section>
+        <section class="surface">
+          <div class="section-row"><div><p class="overline">CAPABILITY LAYER</p><h2>McLain toolbox</h2></div></div>
+          <p class="surface-copy">The OS routes work into specialized engines instead of forcing one app to do everything. Aurora owns physical diagnosis; ECC owns engineering; the rest supply focused capabilities.</p>
+          <div id="capabilityGrid" class="capability-grid"><span class="surface-copy">Loading capability registry…</span></div>
+        </section>
+        <section class="surface">
+          <div class="section-row"><div><p class="overline">ACTIVEPIECES PILOT</p><h2>Front desk issue intake</h2></div></div>
+          <p class="surface-copy">Sign in below to save test issues to the resort's shared queue. No message or dispatch is sent.</p>
+          <form id="frontdeskPilotForm" class="pilot-form form-surface">
+            <label>Issue title<input id="frontdeskTitle" required maxlength="160" value="Guest reported leaking pedestal"></label>
+            <label>Details<textarea id="frontdeskDescription" required maxlength="1200" rows="4">Water is pooling near the RV pedestal and the guest is asking for maintenance.</textarea></label>
+            <div class="split-fields">
+              <label>Location<input id="frontdeskLocation" maxlength="160" value="Site 42"></label>
+              <label>Reported by<input id="frontdeskReportedBy" maxlength="120" value="Front Desk"></label>
+            </div>
+            <div class="split-fields">
+              <label>Category<select id="frontdeskCategory"><option value="maintenance" selected>Maintenance</option><option value="grounds">Grounds</option><option value="security">Security</option><option value="bar">Bar</option><option value="office">Office</option><option value="pool">Pool</option></select></label>
+              <label>Priority<select id="frontdeskPriority"><option value="normal">Normal</option><option value="high" selected>High</option><option value="urgent">Urgent</option><option value="low">Low</option></select></label>
+            </div>
+            <button class="primary-button" type="submit">Send test issue <span>→</span></button>
+          </form>
+          <pre id="frontdeskPilotOutput" class="diagnostic-output">No issue submitted.</pre>
+        </section>
+        <section class="surface">
+          <div class="section-row"><div><p class="overline">OPS REVIEW</p><h2>Work-order drafts</h2></div><button id="clearCompletedWorkOrders" class="text-button" type="button">Refresh queue</button></div>
+          <p class="surface-copy">The shared queue is visible to approved resort staff. Managers can claim, propose an assignee and record evidence here; no staff dispatch or guest message is sent.</p>
+          <form id="opsAuthForm" class="form-surface">
+            <div class="split-fields"><label>Staff email<input id="opsEmail" type="email" autocomplete="email" required></label><label>Password<input id="opsPassword" type="password" autocomplete="current-password" minlength="8" required></label></div>
+            <div class="button-row"><button class="secondary-button" type="submit" name="authAction" value="signin">Sign in</button><button class="secondary-button" type="submit" name="authAction" value="signup">Create account</button></div>
+          </form>
+          <div id="opsAuthStatus" class="surface-copy" role="status"></div>
+          <div id="opsMemberActions" class="button-row" hidden><button id="opsSignOut" class="secondary-button" type="button">Sign out</button><button id="opsImportLocal" class="secondary-button" type="button">Move old device drafts</button></div>
+          <div id="opsWorkOrderList" class="work-order-list"></div>
+        </section>
+        <section class="surface">
+          <div class="section-row"><div><p class="overline">SAFE DIAGNOSTICS</p><h2>ECC engine</h2></div></div>
+          <p class="surface-copy">These checks verify the machinery behind this OS. They are support tools—not the main product.</p>
+          <div id="diagnosticButtons" class="diagnostic-grid"></div>
+          <pre id="diagnosticOutput" class="diagnostic-output">No diagnostic running.</pre>
+        </section>
+        <section class="surface">
+          <p class="overline">DATA OWNERSHIP</p><h2>Your records stay portable</h2>
+          <p class="surface-copy">Projects stay on this device. Work orders sync after staff sign-in; backups include the last loaded queue and any old device drafts.</p>
+          <div class="button-row"><button id="exportData" class="secondary-button">Export backup</button><button id="importData" class="secondary-button">Import backup</button></div>
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button class="nav-button active" data-view="home"><span>⌂</span><small>Home</small></button>
+      <button class="nav-button" data-view="projects"><span>▦</span><small>Projects</small></button>
+      <button class="nav-button capture-nav" data-view="capture"><span>+</span><small>Capture</small></button>
+      <button class="nav-button" data-view="system"><span>⌁</span><small>System</small></button>
+    </nav>
+  </div>
+
+  <div id="projectSheet" class="sheet-backdrop" hidden>
+    <article class="project-sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-handle"></div>
+      <button id="closeSheet" class="sheet-close" aria-label="Close project">×</button>
+      <div id="sheetContent"></div>
+    </article>
+  </div>
+
+  <div id="projectDialog" class="sheet-backdrop" hidden>
+    <form id="projectForm" class="project-sheet compact-sheet" role="dialog" aria-modal="true" aria-labelledby="projectFormTitle">
+      <div class="sheet-handle"></div><button type="button" class="sheet-close" data-close-dialog>×</button>
+      <p class="overline">NEW OWNED ASSET</p><h2 id="projectFormTitle">Create project</h2>
+      <label>Name<input id="projectName" required maxlength="120"></label>
+      <label>Finished outcome<textarea id="projectOutcome" required rows="4" maxlength="1200"></textarea></label>
+      <div class="split-fields"><label>Priority<select id="projectPriority"><option>critical</option><option selected>high</option><option>medium</option><option>low</option></select></label><label>Category<input id="projectCategory" value="General" maxlength="80"></label></div>
+      <button class="primary-button" type="submit">Create project <span>→</span></button>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/core.js"></script>
+  <script src="/ops-config.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

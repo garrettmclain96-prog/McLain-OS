@@ -1,0 +1,13 @@
+{
+  "name": "mclain-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "McLain Systems OS — independent operator control plane",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}

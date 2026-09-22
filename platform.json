@@ -1,0 +1,41 @@
+{
+  "schema": "mclain.platform.v1",
+  "platform": {
+    "id": "mclain-os",
+    "name": "McLain OS",
+    "role": "control-plane",
+    "version": "0.1.0"
+  },
+  "providers": [
+    {
+      "id": "ecc",
+      "name": "ECC",
+      "role": "execution-and-diagnostics",
+      "repository": "https://github.com/garrettmclain96-prog/ecc",
+      "endpoint": "https://ecc-kappa-hazel.vercel.app",
+      "transport": "http",
+      "boundary": "allowlisted-api"
+    },
+    {
+      "id": "aurora-core",
+      "name": "Aurora Core",
+      "role": "intelligence-and-capabilities",
+      "repository": "https://github.com/garrettmclain96-prog/Aurora-core-beta",
+      "endpoint": "https://aurora-core-beta.vercel.app",
+      "transport": "http",
+      "boundary": "provider-api"
+    }
+  ],
+  "products": [
+    {
+      "id": "opspost",
+      "role": "independent-product",
+      "integration": "module-registration"
+    },
+    {
+      "id": "brainchild",
+      "role": "independent-product",
+      "integration": "module-registration"
+    }
+  ]
+}
