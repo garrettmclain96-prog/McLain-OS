@@ -4,7 +4,10 @@
     "id": "mclain-os",
     "name": "McLain OS",
     "role": "control-plane",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "repository": "https://github.com/garrettmclain96-prog/McLain-OS",
+    "capabilityRegistry": "/api/capabilities",
+    "status": "/api/status"
   },
   "providers": [
     {
