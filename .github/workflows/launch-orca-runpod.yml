@@ -58,7 +58,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          bash <(curl -fsSL cli.runpod.io)
+          curl -fsSL             https://github.com/runpod/runpodctl/releases/latest/download/runpodctl-linux-amd64             -o /tmp/runpodctl
+          chmod +x /tmp/runpodctl
+          sudo mv /tmp/runpodctl /usr/local/bin/runpodctl
           runpodctl version
 
       - name: Configure RunPod
@@ -78,7 +80,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          ENV_JSON="$(jq -cn             --arg hf "$HF_TOKEN"             --arg llama "$LLAMA_API_KEY"             '{HF_TOKEN:$hf,LLAMA_API_KEY:$llama,LLAMA_CTX_SIZE:"32768",LLAMA_PARALLEL:"1",LLAMA_CACHE:"/root/.cache/llama.cpp"}')"
+          ENV_JSON="$(jq -cn \
+            --arg hf "$HF_TOKEN" \
+            --arg llama "$LLAMA_API_KEY" \
+            '{HF_TOKEN:$hf,LLAMA_API_KEY:$llama,LLAMA_CTX_SIZE:"32768",LLAMA_PARALLEL:"1",LLAMA_CACHE:"/root/.cache/llama.cpp"}')"
 
           args=(
             pod create
@@ -111,11 +116,11 @@ jobs:
           {
             echo "## Orca deployment launched"
             echo
-            echo "- Image: `$IMAGE`"
-            echo "- GPU: `${{ inputs.gpu }}`"
-            echo "- Cloud: `${{ inputs.cloud_type }}`"
-            echo "- Auto-stop: `${{ inputs.stop_after }}`"
+            echo "Image: $IMAGE"
+            echo "GPU: ${{ inputs.gpu }}"
+            echo "Cloud: ${{ inputs.cloud_type }}"
+            echo "Auto-stop: ${{ inputs.stop_after }}"
             echo
             echo "Use the Pod ID above with:"
-            echo "`https://<pod-id>-8080.proxy.runpod.net`"
+            echo "https://<pod-id>-8080.proxy.runpod.net"
           } >> "$GITHUB_STEP_SUMMARY"
