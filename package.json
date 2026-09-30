@@ -1,6 +1,6 @@
 {
   "name": "mclain-os",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "McLain Systems OS — independent operator control plane",
   "scripts": {

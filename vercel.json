@@ -2,6 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/v1/chat/completions",
+      "destination": "/api/ai-chat"
+    },
+    {
+      "source": "/v1/models",
+      "destination": "/api/ai-models"
+    },
+    {
+      "source": "/api/ai/health",
+      "destination": "/api/ai-health"
+    },
+    {
       "source": "/api/profile",
       "destination": "/api/ecc-bridge?path=profile"
     },
