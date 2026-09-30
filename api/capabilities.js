@@ -106,6 +106,24 @@ const CAPABILITIES = [
     purpose: 'Supplies reviewed reusable skills and workflow patterns for coding agents.'
   },
   {
+    id: 'model-gateway',
+    name: 'McLain AI Gateway',
+    role: 'Provider-agnostic model routing',
+    status: 'active',
+    repo: 'garrettmclain96-prog/McLain-OS',
+    purpose: 'Exposes one authenticated OpenAI-compatible interface while keeping model providers replaceable behind internal aliases.',
+    routes: ['chat-completions', 'models', 'health'],
+    useFor: ['McLain OS intelligence', 'cyber and code analysis', 'future specialist models'],
+    integration: {
+      ownerInterface: '/v1',
+      adapter: 'server-side authenticated model router',
+      firstPilot: 'mclain-cyber -> isolated OrcaSAQ GPU worker',
+      readiness: 'gateway code active; GPU endpoint credentials required',
+      nextAction: 'Attach a healthy Orca worker through ORCA_BASE_URL and ORCA_API_KEY.',
+      proof: 'Clients call model mclain-cyber without depending on the Orca hostname or upstream model identifier.'
+    }
+  },
+  {
     id: 'freellmapi',
     name: 'FreeLLMAPI',
     role: 'Model routing',
@@ -174,7 +192,8 @@ module.exports = function handler(req, res) {
       engineeringRuntime: 'ECC',
       automationEngine: 'Activepieces',
       memorySpine: 'Mem0',
-      syncEngine: 'Electric'
+      syncEngine: 'Electric',
+      modelGateway: 'McLain AI Gateway'
     },
     capabilities: CAPABILITIES
   });
