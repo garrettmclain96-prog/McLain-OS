@@ -1,0 +1,121 @@
+name: Launch Orca GPU Pod
+
+on:
+  workflow_dispatch:
+    inputs:
+      gpu:
+        description: RunPod GPU ID
+        required: true
+        default: NVIDIA GeForce RTX 4090
+        type: string
+      stop_after:
+        description: Automatically stop GPU after this duration
+        required: true
+        default: 4h
+        type: choice
+        options:
+          - 2h
+          - 4h
+          - 8h
+          - 24h
+      cloud_type:
+        description: RunPod cloud tier
+        required: true
+        default: SECURE
+        type: choice
+        options:
+          - SECURE
+          - COMMUNITY
+
+permissions:
+  contents: read
+
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    env:
+      RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      LLAMA_API_KEY: ${{ secrets.LLAMA_API_KEY }}
+      REGISTRY_AUTH_ID: ${{ secrets.RUNPOD_REGISTRY_AUTH_ID }}
+      IMAGE: ghcr.io/garrettmclain96-prog/mclain-orca-cyber:latest
+
+    steps:
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in RUNPOD_API_KEY HF_TOKEN LLAMA_API_KEY; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Install RunPod CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash <(curl -fsSL cli.runpod.io)
+          runpodctl version
+
+      - name: Configure RunPod
+        shell: bash
+        run: |
+          set -euo pipefail
+          runpodctl config --apiKey "$RUNPOD_API_KEY"
+
+      - name: Verify GPU catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          runpodctl gpu list
+
+      - name: Launch isolated Orca worker
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ENV_JSON="$(jq -cn             --arg hf "$HF_TOKEN"             --arg llama "$LLAMA_API_KEY"             '{HF_TOKEN:$hf,LLAMA_API_KEY:$llama,LLAMA_CTX_SIZE:"32768",LLAMA_PARALLEL:"1",LLAMA_CACHE:"/root/.cache/llama.cpp"}')"
+
+          args=(
+            pod create
+            --name "mclain-orca-cyber"
+            --image "$IMAGE"
+            --gpu-id "${{ inputs.gpu }}"
+            --gpu-count 1
+            --container-disk-in-gb 30
+            --volume-in-gb 30
+            --volume-mount-path "/root/.cache"
+            --ports "8080/http"
+            --cloud-type "${{ inputs.cloud_type }}"
+            --ssh=false
+            --stop-after "${{ inputs.stop_after }}"
+            --env "$ENV_JSON"
+          )
+
+          if [[ -n "${REGISTRY_AUTH_ID:-}" ]]; then
+            args+=(--registry-auth-id "$REGISTRY_AUTH_ID")
+          fi
+
+          echo "Launching isolated GPU worker. Secrets are not printed."
+          runpodctl "${args[@]}"
+
+      - name: Show running Pods
+        shell: bash
+        run: |
+          set -euo pipefail
+          runpodctl pod list
+          {
+            echo "## Orca deployment launched"
+            echo
+            echo "- Image: `$IMAGE`"
+            echo "- GPU: `${{ inputs.gpu }}`"
+            echo "- Cloud: `${{ inputs.cloud_type }}`"
+            echo "- Auto-stop: `${{ inputs.stop_after }}`"
+            echo
+            echo "Use the Pod ID above with:"
+            echo "`https://<pod-id>-8080.proxy.runpod.net`"
+          } >> "$GITHUB_STEP_SUMMARY"
