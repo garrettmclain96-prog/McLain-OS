@@ -27,6 +27,20 @@
       "endpoint": "https://aurora-core-beta.vercel.app",
       "transport": "http",
       "boundary": "provider-api"
+    },
+    {
+      "id": "model-gateway",
+      "name": "McLain AI Gateway",
+      "role": "model-routing-and-policy-boundary",
+      "endpoint": "/v1",
+      "transport": "openai-compatible-http",
+      "boundary": "authenticated-model-router",
+      "models": [
+        "mclain-cyber"
+      ],
+      "upstreams": [
+        "orca-cyber"
+      ]
     }
   ],
   "products": [
