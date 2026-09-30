@@ -46,3 +46,25 @@ The browser does not receive arbitrary proxy access. The bridge allowlists the e
 ## Source-of-truth rule
 
 This codebase is the McLain OS source of truth. ECC integrations should be consumed across an API/package boundary instead of reaching into ECC's filesystem.
+
+
+## McLain AI Gateway
+
+McLain OS now owns an authenticated OpenAI-compatible model boundary. Consumers use the stable model alias `mclain-cyber`; the underlying provider is private configuration.
+
+Routes:
+
+- `POST /v1/chat/completions` — OpenAI-compatible chat completions, including streaming and tool-call schemas.
+- `GET /v1/models` — returns McLain-owned aliases only.
+- `GET /api/ai/health` — shallow configuration health; add `?deep=1` with gateway authentication to probe the upstream worker.
+
+Runtime variables:
+
+- `MCLAIN_AI_GATEWAY_KEY` — required client key for the McLain AI Gateway.
+- `ORCA_BASE_URL` — private/proxied Orca worker base URL; may include `/v1`.
+- `ORCA_API_KEY` — upstream llama-server API key.
+- `ORCA_MODEL` — defaults to `OrcaSAQ-2-27B-Uncensored`.
+
+The gateway fails closed when its client key is absent. Requests cannot select arbitrary upstream URLs or models. No model execution tools are attached at this layer.
+
+The GPU worker image and deployment contract live in `inference/orca/`.
